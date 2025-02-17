@@ -2,7 +2,7 @@
 
 ## Overview
 
-Universal Package Finder is a powerful, cross-repository search tool designed for researchers, developers, and data scientists. It searches for packages across multiple repositories, including:
+Universal Package Finder is a powerful, cross-repository search tool. It searches for packages across the repositories below ( and more repositories can be added):
 
 - Bioconda
 - Anaconda
