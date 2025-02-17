@@ -141,6 +141,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - your.email@example.com
-
-Project Link: [https://github.com/yourusername/universal-package-finder](https://github.com/yourusername/universal-package-finder)
+Your Name - ecem.ilgunl@bilkent.edu.tr
