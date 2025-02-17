@@ -18,6 +18,18 @@ Universal Package Finder is a powerful, cross-repository search tool. It searche
 - GitHub Container Registry
 - Homebrew
 
+Future packages to include: 
+- Biocontainers (already seems to be covered by Docker but better to have explicit support)
+- Julia Package Registry (https://julialang.org/packages/) and Pkg.jl package manager
+- CPAN (Comprehensive Perl Archive Network)
+- crates.io (Rust's package registry)
+- Spack (HPC package manager)
+- EasyBuild (Scientific software management)
+- Guix-Bio (GNU Guix for bioinformatics)
+- Chocolatey (Windows package manager)
+- Linuxbrew (already partially covered by Homebrew)
+- Maven Central (for Java/Scala bioinformatics tools)
+
 ## Features
 
 - 🔍 Multi-repository package search
