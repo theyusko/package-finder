@@ -40,8 +40,8 @@ Universal Package Finder is a powerful, cross-repository search tool designed fo
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/universal-package-finder.git
-cd universal-package-finder
+git clone https://github.com/theyusko/package-finder.git
+cd package-finder
 
 # Create a virtual environment (recommended)
 python3 -m venv venv
@@ -51,7 +51,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Install the package
-pip install .
+pip install -e .
 ```
 
 ## Usage
