@@ -10,7 +10,7 @@ from .cran import CRANRepository
 from .ropensci import ROpenSciRepository
 from .posit import PositRepository
 
-from .galaxy_tool_shed import GalaxyToolShedRepository
+from .galaxy import GalaxyRepository
 from .docker_hub import DockerHubRepository
 from .github_container_registry import GitHubContainerRegistryRepository
 from .homebrew import HomebrewRepository
@@ -26,7 +26,7 @@ __all__ = [
     'ROpenSciRepository',
     'PositRepository',
     'BioLibRepository',
-    'GalaxyToolShedRepository',
+    'GalaxyRepository',
     'DockerHubRepository',
     'GitHubContainerRegistryRepository',
     'HomebrewRepository'

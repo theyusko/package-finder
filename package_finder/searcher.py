@@ -13,7 +13,7 @@ from .repositories import (
     ROpenSciRepository,
     PositRepository,
     BioLibRepository,
-    GalaxyToolShedRepository,
+    GalaxyRepository,
     DockerHubRepository,
     GitHubContainerRegistryRepository,
     HomebrewRepository
@@ -33,7 +33,7 @@ class PackageSearcher:
             ROpenSciRepository(),
             PositRepository(),
             BioLibRepository(),
-            GalaxyToolShedRepository(),
+            GalaxyRepository(),
             DockerHubRepository(),
             GitHubContainerRegistryRepository(),
             HomebrewRepository()

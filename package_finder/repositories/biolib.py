@@ -11,20 +11,12 @@ class BioLibRepository(PackageRepository):
     
     def __init__(self):
         self.base_url = "https://biolib.com"
-        self.verbose_logging = True
-    
-    def _log(self, message):
-        """Logging method that can be toggled."""
-        if self.verbose_logging:
-            print(f"[BioLib DEBUG] {message}")
     
     def get_repository_name(self) -> str:
         return "BioLib"
     
     def search_package(self, package_name: str) -> Optional[PackageInfo]:
         try:
-            self._log(f"Searching for package: {package_name}")
-            
             # More comprehensive URL variations
             url_variations = [
                 f"{self.base_url}/bio-utils/{package_name.lower()}",
@@ -41,17 +33,15 @@ class BioLibRepository(PackageRepository):
             # Try direct URLs first
             for url in url_variations:
                 try:
-                    self._log(f"Trying direct URL: {url}")
                     response = requests.get(url)
                     if response.status_code == 200:
                         working_url = url
                         break
-                except requests.RequestException as e:
-                    self._log(f"Failed to access {url}: {e}")
+                except requests.RequestException:
+                    continue
             
             # If direct access fails, try search
             if not response or response.status_code != 200:
-                self._log("Direct access failed, attempting search")
                 search_url = f"{self.base_url}/search"
                 params = {'q': package_name}
                 
@@ -59,7 +49,6 @@ class BioLibRepository(PackageRepository):
                     search_response = requests.get(search_url, params=params)
                     
                     if search_response.status_code != 200:
-                        self._log(f"Search failed with status {search_response.status_code}")
                         return None
                     
                     # Parse search results
@@ -72,7 +61,6 @@ class BioLibRepository(PackageRepository):
                     ))
                     
                     if not exact_matches:
-                        self._log("No matching packages found in search")
                         return None
                     
                     # Use first matching result
@@ -81,17 +69,13 @@ class BioLibRepository(PackageRepository):
                     if not package_url.startswith('http'):
                         package_url = self.base_url + package_url
                     
-                    self._log(f"Found package URL through search: {package_url}")
-                    
                     response = requests.get(package_url)
                     working_url = package_url
                     
                     if response.status_code != 200:
-                        self._log(f"Failed to access search result URL: {package_url}")
                         return None
                 
-                except requests.RequestException as e:
-                    self._log(f"Search request failed: {e}")
+                except requests.RequestException:
                     return None
             
             # Parse package page
@@ -105,15 +89,12 @@ class BioLibRepository(PackageRepository):
             )
             
             if not title_elem:
-                self._log("Could not find package title")
                 return None
             
             # Get the actual package name from the page
             actual_name = title_elem.text.strip()
             if ':' in actual_name:
                 actual_name = actual_name.split(':')[0].strip()
-            
-            self._log(f"Extracted package name: {actual_name}")
             
             # Extract description
             description_elem = (
@@ -131,8 +112,6 @@ class BioLibRepository(PackageRepository):
                 else:
                     description = description_elem.text.strip()
             
-            self._log(f"Extracted description: {description}")
-            
             # Check for threading support
             has_threading, thread_flags = find_thread_flags(description or '')
             
@@ -148,6 +127,5 @@ class BioLibRepository(PackageRepository):
                 thread_flags=thread_flags
             )
             
-        except Exception as e:
-            self._log(f"Unexpected error: {e}")
+        except Exception:
             return None
