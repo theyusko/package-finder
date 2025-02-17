@@ -2,7 +2,7 @@
 
 ## Overview
 
-Universal Package Finder is a powerful, cross-repository search tool designed for researchers, developers, and data scientists. It searches for packages across multiple repositories including:
+Universal Package Finder is a powerful, cross-repository search tool designed for researchers, developers, and data scientists. It searches for packages across multiple repositories, including:
 
 - Bioconda
 - Anaconda
@@ -35,6 +35,7 @@ Universal Package Finder is a powerful, cross-repository search tool designed fo
 - Required Python libraries (installed automatically):
   - requests
   - beautifulsoup4
+  - typing
 
 ### Install from Source
 
@@ -62,13 +63,10 @@ Search for packages across multiple repositories:
 
 ```bash
 # Basic usage
-package-finder search qsmooth fastqc iseqqc
+package-finder search qsmooth
 
 # Search for multiple packages
 package-finder search numpy pandas scipy
-
-# Search for bioinformatics tools
-package-finder search bwa samtools bowtie2
 ```
 
 ### Python Module
@@ -102,7 +100,6 @@ Found 'fastqc' in 4 repositories:
 ✅ Package 'fastqc' found in Bioconda!
 URL: https://anaconda.org/bioconda/fastqc
 Description: A quality control tool for high throughput sequence data.
-Latest version: 0.12.1
 Version counts: 3 major.minor, 10 total
 All versions grouped by Major.Minor: {0.10.1}, {0.11.2, 0.11.3, 0.11.4, 0.11.5, 0.11.6, 0.11.7, 0.11.8, 0.11.9}, {0.12.1}
 License: GPL >=3
@@ -125,21 +122,6 @@ custom_searcher = PackageSearcher(repositories=[
     BiocondaRepository()
 ])
 ```
-
-## Troubleshooting
-
-- Ensure you have the latest version of the package
-- Check your internet connection
-- Some repositories might have temporary unavailability
-- Not all packages exist in all repositories
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## License
 
