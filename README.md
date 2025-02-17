@@ -18,7 +18,7 @@ Universal Package Finder is a powerful, cross-repository search tool. It searche
 - GitHub Container Registry
 - Homebrew
 
-Future packages to include: 
+Future repositories to include: 
 - Biocontainers (already seems to be covered by Docker but better to have explicit support)
 - Julia Package Registry (https://julialang.org/packages/) and Pkg.jl package manager
 - CPAN (Comprehensive Perl Archive Network)
