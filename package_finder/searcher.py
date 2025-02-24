@@ -1,8 +1,10 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 import concurrent.futures
+import logging
 from .models import PackageInfo
 from collections import defaultdict
 import re
+
 from .repositories import (
     BiocondaRepository,
     AnacondaRepository,
@@ -16,8 +18,14 @@ from .repositories import (
     GalaxyRepository,
     DockerHubRepository,
     GitHubContainerRegistryRepository,
-    HomebrewRepository
+    HomebrewRepository,
+    LinuxManpagesRepository,
+    BedtoolsRepository
 )
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 class PackageSearcher:
     """Main class to coordinate package searches across multiple repositories."""
@@ -36,7 +44,9 @@ class PackageSearcher:
             GalaxyRepository(),
             DockerHubRepository(),
             GitHubContainerRegistryRepository(),
-            HomebrewRepository()
+            HomebrewRepository(),
+            LinuxManpagesRepository(),
+            BedtoolsRepository()
         ]
     
     def search_package(self, package_name: str) -> List[PackageInfo]:
@@ -53,16 +63,23 @@ class PackageSearcher:
         Returns:
             Dictionary mapping package names to lists of PackageInfo objects
         """
+        # Create results dictionary
         results: Dict[str, List[PackageInfo]] = {name: [] for name in package_names}
+        
+        # Calculate total searches
         total_searches = len(package_names) * len(self.repositories)
         completed = 0
         
         print(f"\nSearching for {len(package_names)} packages across {len(self.repositories)} repositories...")
         
+        # Store exceptions for debugging
+        exceptions = []
+        
+        # Perform search with more detailed debugging
         with concurrent.futures.ThreadPoolExecutor(max_workers=min(32, total_searches)) as executor:
             # Create futures for all package-repository combinations
             future_to_search = {
-                executor.submit(repo.search_package, pkg_name): (pkg_name, repo)
+                executor.submit(self._safe_search, repo, pkg_name): (pkg_name, repo)
                 for pkg_name in package_names
                 for repo in self.repositories
             }
@@ -75,27 +92,73 @@ class PackageSearcher:
                 try:
                     result = future.result()
                     if result:
-                        # Only add if the package name matches or the result contains meaningful information
-                        is_generic_result = (
-                            result.name.lower() == 'biolib' or  # Catch the generic BioLib result
-                            (not result.versions and not result.description)  # Or if it's essentially empty
-                        )
+                        # Log each result found
+                        logger.debug(f"Found result for {pkg_name} in {repo.get_repository_name()}: {result}")
                         
-                        if not is_generic_result:
+                        # Avoid exact duplicate results
+                        existing_names = {r.name.lower() for r in results[pkg_name]}
+                        existing_repos = {r.repository.lower() for r in results[pkg_name]}
+                        
+                        # Ensure the result is not a duplicate
+                        if (result.name.lower() not in existing_names or 
+                            result.repository.lower() not in existing_repos):
                             results[pkg_name].append(result)
+                        else:
+                            logger.debug(f"Skipped duplicate result for {result.name}")
+                    else:
+                        logger.debug(f"No result found for {pkg_name} in {repo.get_repository_name()}")
                     
                     # Update progress
                     progress = (completed * 100) // total_searches
                     print(f"\rProgress: {progress}% ({completed}/{total_searches} searches completed)", end="")
                     
                 except Exception as e:
-                    print(f"\nError searching {repo.get_repository_name()} for {pkg_name}: {e}")
+                    logger.error(f"Error searching {repo.get_repository_name()} for {pkg_name}: {e}")
+                    exceptions.append((pkg_name, repo.get_repository_name(), str(e)))
         
         print("\nSearch completed!")
+        
+        # Print out any exceptions for debugging
+        if exceptions:
+            print("\nExceptions during search:")
+            for pkg, repo, err in exceptions:
+                print(f"  - Package: {pkg}, Repository: {repo}, Error: {err}")
+        
+        # Log final results
+        for pkg_name, pkg_results in results.items():
+            if pkg_results:
+                logger.debug(f"Final results for {pkg_name}: {[f'{r.name} ({r.repository})' for r in pkg_results]}")
+            else:
+                logger.debug(f"No results found for {pkg_name}")
+        
         return results
-
-from collections import defaultdict
-import re
+    
+    def _safe_search(self, repo, package_name: str) -> Optional[PackageInfo]:
+        """
+        Safely search a single repository with detailed error handling.
+        
+        Args:
+            repo: Repository to search
+            package_name: Name of the package to search for
+        
+        Returns:
+            PackageInfo object if found, None otherwise
+        """
+        try:
+            # Attempt to search the repository
+            result = repo.search_package(package_name)
+            
+            # Log the search attempt
+            if result:
+                logger.debug(f"Found result in {repo.get_repository_name()}: {result.name}")
+            else:
+                logger.debug(f"No result found in {repo.get_repository_name()} for {package_name}")
+            
+            return result
+        except Exception as e:
+            # Log any exceptions during the search
+            logger.error(f"Exception in {repo.get_repository_name()} for {package_name}: {e}")
+            return None
 
 def get_major_minor(version: str) -> str:
     """Extract major.minor from version string."""

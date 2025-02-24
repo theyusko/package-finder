@@ -22,13 +22,15 @@ Future packages to include:
 - Biocontainers (already seems to be covered by Docker but better to have explicit support)
 - Julia Package Registry (https://julialang.org/packages/) and Pkg.jl package manager
 - CPAN (Comprehensive Perl Archive Network)
-- crates.io (Rust's package registry)
+- crates.io (Rust's package registry) TODO tool
 - Spack (HPC package manager)
 - EasyBuild (Scientific software management)
 - Guix-Bio (GNU Guix for bioinformatics)
 - Chocolatey (Windows package manager)
 - Linuxbrew (already partially covered by Homebrew)
 - Maven Central (for Java/Scala bioinformatics tools)
+- Linux Manpages (crac was there)
+- bedtools (maxcounts was there) https://bedtools.readthedocs.io/en/latest/ Right now it doesn't work properly
 
 ## Features
 
