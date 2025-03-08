@@ -14,8 +14,6 @@ from .galaxy import GalaxyRepository
 from .docker_hub import DockerHubRepository
 from .github_container_registry import GitHubContainerRegistryRepository
 from .homebrew import HomebrewRepository
-from .linux_manpages import LinuxManpagesRepository
-from .bedtools import BedtoolsRepository
 
 __all__ = [
     'PackageRepository',
@@ -31,7 +29,5 @@ __all__ = [
     'GalaxyRepository',
     'DockerHubRepository',
     'GitHubContainerRegistryRepository',
-    'HomebrewRepository',
-    'LinuxManpagesRepository',
-    'BedtoolsRepository'
+    'HomebrewRepository'
 ]
