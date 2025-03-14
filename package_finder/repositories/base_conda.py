@@ -19,6 +19,18 @@ class BaseAnacondaRepository(PackageRepository):
     
     def search_package(self, package_name: str) -> Optional[PackageInfo]:
         """
+        Wrapper for search package helper that tries both the package name and 'bioconductor-' + package name.
+        """  
+        exact_name_result = self.search_package_helper(package_name)
+        bioconductor_result = self.search_package_helper("bioconductor-" + package_name)
+
+        if bioconductor_result != None:
+            return bioconductor_result
+        else:
+            return exact_name_result
+    
+    def search_package_helper(self, package_name: str) -> Optional[PackageInfo]:
+        """
         Search for a package in the repository.
         
         Args:
@@ -28,7 +40,7 @@ class BaseAnacondaRepository(PackageRepository):
             Optional[PackageInfo]: Package information if found, None otherwise
         """
         try:
-            # First try exact match
+            # Try exact match
             response = requests.get(f"{self.base_url}/{package_name}")
             if response.status_code == 200:
                 data = response.json()

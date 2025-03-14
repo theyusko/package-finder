@@ -10,8 +10,6 @@ def find_thread_flags(description: str, readme: str = None) -> Tuple[bool, List[
         '-t', '--threads', '-threads', '--thread', '-thread',
         '--nthreads', '-nthreads', '--num-threads', '-n',
         '--cores', '-cores', '--num-cores',
-
-        # Additional keywords, might be parallel processing instead of threads 
         '-p', '--processes', '-processes', 
         '--parallel', '-parallel',
         '--jobs', '-j', 
@@ -20,7 +18,6 @@ def find_thread_flags(description: str, readme: str = None) -> Tuple[bool, List[
         '--threads-per-process', '--tpp'
     }
     
-    # Common patterns for thread-related flags
     thread_patterns = [
         r'-t\s*\d+',
         r'--threads\s*\d+',
@@ -28,8 +25,6 @@ def find_thread_flags(description: str, readme: str = None) -> Tuple[bool, List[
         r'-n\s*\d+',
         r'--num-threads\s*\d+',
         r'--cores\s*\d+'
-
-        # Additional patterns
         r'-p\s*\d+',
         r'--processes\s*\d+',
         r'--parallel\s*\d*',
@@ -42,21 +37,17 @@ def find_thread_flags(description: str, readme: str = None) -> Tuple[bool, List[
     
     text_to_search = (description or '').lower() + ' ' + (readme or '').lower()
     
-    # Look for thread-related keywords
     found_flags = set()
     
-    # Check for exact matches of thread flags
     for keyword in thread_keywords:
         if keyword in text_to_search:
             found_flags.add(keyword)
     
-    # Check for pattern matches
     for pattern in thread_patterns:
         if re.search(pattern, text_to_search):
             matches = re.findall(pattern, text_to_search)
             found_flags.update(matches)
     
-    # Check for threading indicators
     threading_indicators = [
         'parallel', 'multithread', 'multi-thread', 'multi thread', 
         'concurrent', 'cpu cores', 'processor cores',
