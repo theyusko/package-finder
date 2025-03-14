@@ -141,4 +141,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - ecem.ilgun@bilkent.edu.tr
+Ecem İlgün - ecem.ilgun@bilkent.edu.tr
