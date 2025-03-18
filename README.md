@@ -36,7 +36,6 @@ Future repositories to include:
 - 📦 Comprehensive package information retrieval
 - 🏷️ Version tracking and display
 - 🧵 Threading support detection
-- 🌐 Wide range of repositories supported
 
 ## Installation
 
