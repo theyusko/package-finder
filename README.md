@@ -12,7 +12,7 @@ Universal Package Finder is a powerful, cross-repository search tool. It searche
 - CRAN
 - rOpenSci
 - Posit Package Manager
-- BioLib
+- BioLib (not working atm)
 - Galaxy Tool Shed
 - Docker Hub
 - GitHub Container Registry
