@@ -105,7 +105,7 @@ class BioconductorRepository(PackageRepository):
             Dictionary with package information or None if not found
         """
         try:
-            print(f"Attempting to extract package info from {url}")
+            # print(f"Attempting to extract package info from {url}")
             response = requests.get(url, timeout=15)
             
             if response.status_code != 200:
@@ -145,7 +145,7 @@ class BioconductorRepository(PackageRepository):
                 'README': readme
             }
             
-            print(f"Successfully extracted info for package: {package_info}")
+            # print(f"Successfully extracted info for package: {package_info}")
             return package_info
             
         except Exception as e:
@@ -201,7 +201,7 @@ class BioconductorRepository(PackageRepository):
                     head_response = requests.head(url, timeout=10)
                     
                     if head_response.status_code == 200:
-                        print(f"Found package page at {url}")
+                        # print(f"Found package page at {url}")
                         
                         # Extract information from the HTML page
                         package_info = self._extract_package_info_from_html(url)
@@ -232,7 +232,7 @@ class BioconductorRepository(PackageRepository):
             ]
             
             for api_url in api_urls:
-                print(f"Trying API URL: {api_url}")
+                # print(f"Trying API URL: {api_url}")
                 response = requests.get(api_url, timeout=15)
                 
                 if response.status_code == 200:
@@ -253,7 +253,7 @@ class BioconductorRepository(PackageRepository):
         Enhanced search for a package with improved reliability.
         Tries multiple approaches to find the package information.
         """
-        print(f"Searching for Bioconductor package: {package_name}")
+        # print(f"Searching for Bioconductor package: {package_name}")
         
         # First try to find the package by direct URL access
         package_info, correct_name = self._find_package_by_direct_url(package_name)
@@ -309,7 +309,7 @@ class BioconductorRepository(PackageRepository):
         
         # If we still couldn't find the package
         if not package_info:
-            print(f"Package {package_name} not found in Bioconductor")
+            # print(f"Package {package_name} not found in Bioconductor")
             return None
             
         # Process the package information
